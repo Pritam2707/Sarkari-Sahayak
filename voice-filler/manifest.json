@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "Sarkari Sahayak - Voice Form Filler",
+  "version": "1.0.0",
+  "description": "Voice-driven web form filling in Indian regional languages powered by Sarvam AI (Saaras STT & Sarvam-105B).",
+  "permissions": [
+    "sidePanel",
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://api.sarvam.ai/*",
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "action": {
+    "default_title": "Open Sarkari Sahayak"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "all_frames": true,
+      "run_at": "document_idle"
+    }
+  ]
+}

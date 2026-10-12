@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sarkari Sahayak</title>
+  <style>
+    :root {
+      --bg: #1e1e2e;
+      --surface: #313244;
+      --surface-hover: #45475a;
+      --text: #cdd6f4;
+      --text-muted: #a6adc8;
+      --accent: #cba6f7;
+      --accent-hover: #b4befe;
+      --success: #a6e3a1;
+      --warn: #f9e2af;
+      --error: #f38ba8;
+      --border: #45475a;
+      --radius: 12px;
+      --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.5;
+      width: 100%;
+      min-width: 320px;
+      max-width: 400px;
+      padding: 16px;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .title-group h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.3px;
+    }
+
+    .title-group p {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .lang-select {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      outline: none;
+      font-weight: 500;
+    }
+    .lang-select:focus {
+      border-color: var(--accent);
+    }
+
+    /* Status Bar */
+    .status-bar {
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      transition: background 0.2s ease;
+    }
+    .status-dot.active { background: var(--warn); }
+    .status-dot.success { background: var(--success); }
+    .status-dot.error { background: var(--error); }
+    .status-dot.listening {
+      background: var(--accent);
+      animation: pulse 1s infinite;
+    }
+
+    .mode-badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: rgba(203, 166, 247, 0.15);
+      color: var(--accent);
+      cursor: pointer;
+      border: 1px solid rgba(203, 166, 247, 0.3);
+      user-select: none;
+    }
+    .mode-badge.live {
+      background: rgba(166, 227, 161, 0.15);
+      color: var(--success);
+      border-color: rgba(166, 227, 161, 0.3);
+    }
+
+    /* Mic Section */
+    .mic-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 0 8px 0;
+      gap: 10px;
+    }
+
+    .mic-button {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 3px solid var(--accent);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+      outline: none;
+    }
+
+    .mic-button:hover {
+      background: var(--surface-hover);
+      transform: scale(1.05);
+    }
+
+    .mic-button:active {
+      transform: scale(0.96);
+    }
+
+    .mic-button.recording {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: #fff;
+      animation: mic-pulse 1.4s infinite;
+    }
+
+    @keyframes mic-pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(203, 166, 247, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 18px rgba(203, 166, 247, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(203, 166, 247, 0);
+      }
+    }
+
+    .mic-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Actions row */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      outline: none;
+    }
+
+    .btn:hover {
+      background: var(--surface-hover);
+      border-color: var(--accent);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    /* Transcript Box */
+    .box-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .transcript-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      min-height: 64px;
+      max-height: 100px;
+      overflow-y: auto;
+      font-size: 13px;
+      color: var(--text);
+      white-space: pre-wrap;
+      word-break: break-word;
+      transition: border-color 0.2s ease;
+    }
+    .transcript-box:focus {
+      border-color: var(--accent);
+      outline: none;
+    }
+
+    /* Field List */
+    .field-list-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .field-list {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 8px;
+      max-height: 220px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      border: 1px solid transparent;
+      transition: background 0.15s ease;
+      cursor: pointer;
+    }
+    .field-item:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(203, 166, 247, 0.3);
+    }
+
+    .field-info {
+      display: flex;
+      flex-direction: column;
+      max-width: 70%;
+      overflow: hidden;
+    }
+
+    .field-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .field-val {
+      font-size: 11px;
+      color: var(--accent);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .field-status-icon {
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .field-status-icon.filled { color: var(--success); }
+    .field-status-icon.warn { color: var(--warn); }
+    .field-status-icon.empty { color: var(--text-muted); opacity: 0.4; }
+
+    /* Alert / Error container */
+    .error-container {
+      display: none;
+      background: rgba(243, 139, 168, 0.12);
+      border: 1px solid var(--error);
+      color: var(--error);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      word-break: break-word;
+    }
+
+    /* Key Settings Drawer */
+    .settings-drawer {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px;
+      gap: 8px;
+      flex-direction: column;
+    }
+    .settings-drawer.open {
+      display: flex;
+    }
+    .settings-drawer input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      outline: none;
+    }
+    .settings-drawer input:focus {
+      border-color: var(--accent);
+    }
+
+    /* Icons */
+    svg {
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="title-group">
+      <h1>Sarkari Sahayak</h1>
+      <p>Voice Form Filler (Sarvam AI)</p>
+    </div>
+    <select id="langSelect" class="lang-select">
+      <!-- Populated dynamically -->
+    </select>
+  </div>
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <div class="status-indicator">
+      <div id="statusDot" class="status-dot"></div>
+      <span id="statusText">Ready</span>
+    </div>
+    <div id="modeToggle" class="mode-badge" title="Click to toggle Mock / Live API mode">Mock Mode</div>
+  </div>
+
+  <!-- Error display -->
+  <div id="errorBox" class="error-container"></div>
+
+  <!-- Settings Drawer (Collapsible) -->
+  <div id="settingsDrawer" class="settings-drawer">
+    <div style="font-size: 11px; font-weight: 600; color: var(--text-muted);">SARVAM AI API KEY</div>
+    <input type="password" id="apiKeyInput" placeholder="sk_..." />
+    <div style="display: flex; gap: 6px; justify-content: flex-end;">
+      <button id="saveKeyBtn" class="btn btn-primary" style="padding: 4px 10px; font-size: 11px;">Save</button>
+      <button id="closeSettingsBtn" class="btn" style="padding: 4px 10px; font-size: 11px;">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Mic Section -->
+  <div class="mic-section">
+    <button id="micBtn" class="mic-button" title="Click or tap to record your voice" aria-label="Microphone">
+      <svg id="micIcon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+        <line x1="12" y1="19" x2="12" y2="22"></line>
+        <line x1="8" y1="22" x2="16" y2="22"></line>
+      </svg>
+    </button>
+    <div id="micHint" class="mic-hint">Tap mic to speak your details</div>
+  </div>
+
+  <!-- Quick Action Controls -->
+  <div class="quick-actions">
+    <button id="testFillBtn" class="btn" title="Fills detected fields using hardcoded JSON (Step 3a)">
+      ⚡ Hardcoded Fill
+    </button>
+    <button id="scanFieldsBtn" class="btn" title="Scan fields on current tab">
+      🔍 Scan Form
+    </button>
+  </div>
+
+  <!-- Transcript Box -->
+  <div class="box-container">
+    <div class="box-header">
+      <span>Voice Transcript (Saaras STT)</span>
+      <span id="charCount" style="font-size: 10px; color: var(--text-muted);"></span>
+    </div>
+    <div id="transcriptBox" class="transcript-box" contenteditable="true" placeholder="Spoken text appears here..."></div>
+  </div>
+
+  <!-- Stretch Buttons: Process & Readback -->
+  <div class="quick-actions">
+    <button id="processTranscriptBtn" class="btn btn-primary" title="Map transcript to form fields via Sarvam-105B and fill">
+      🪄 Process & Fill
+    </button>
+    <button id="readBackBtn" class="btn" title="Read back filled fields via Bulbul TTS">
+      🔊 Read Back
+    </button>
+  </div>
+
+  <!-- Field List Section -->
+  <div class="field-list-wrapper">
+    <div class="box-header">
+      <span>Detected Fields (<span id="fieldCount">0</span>)</span>
+      <span id="filledCount" style="color: var(--success);">0 filled</span>
+    </div>
+    <div id="fieldList" class="field-list">
+      <div style="color: var(--text-muted); font-size: 12px; text-align: center; padding: 12px;">
+        Click "Scan Form" or speak to detect fields on the active page.
+      </div>
+    </div>
+  </div>
+
+  <audio id="ttsAudio" style="display: none;"></audio>
+
+  <script src="config.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>

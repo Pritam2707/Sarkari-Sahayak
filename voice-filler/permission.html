@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microphone Setup - Sarkari Sahayak</title>
+  <style>
+    :root {
+      --bg: #1e1e2e;
+      --surface: #313244;
+      --text: #cdd6f4;
+      --text-muted: #a6adc8;
+      --accent: #cba6f7;
+      --accent-hover: #b4befe;
+      --success: #a6e3a1;
+      --error: #f38ba8;
+      --border: #45475a;
+      --radius: 12px;
+      --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+    h2 {
+      color: var(--accent);
+      margin: 0 0 12px 0;
+      font-size: 20px;
+    }
+    p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 0 0 24px 0;
+    }
+    button {
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    button:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+    #status {
+      margin-top: 20px;
+      font-size: 14px;
+      min-height: 24px;
+      font-weight: 500;
+    }
+    .granted {
+      color: var(--success);
+    }
+    .failed {
+      color: var(--error);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Microphone Setup</h2>
+    <p>
+      Chrome side panels cannot display microphone permission prompts directly. Click the button below to allow microphone access for <strong>Sarkari Sahayak</strong> once from this tab.
+    </p>
+    <button id="allowBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+        <line x1="12" y1="19" x2="12" y2="22"></line>
+        <line x1="8" y1="22" x2="16" y2="22"></line>
+      </svg>
+      Allow Microphone
+    </button>
+    <div id="status"></div>
+  </div>
+  <script src="permission.js"></script>
+</body>
+</html>
